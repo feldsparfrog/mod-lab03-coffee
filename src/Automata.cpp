@@ -88,7 +88,9 @@ void Automata::Choice(int index) {
             std::cout << "Вы выбрали: " << Menu[index] << std::endl;
             ChosenPosition = index;
             Check();
-        } else std::cout << "Товар не найден!" << std::endl; 
+        } else {
+            std::cout << "Товар не найден!" << std::endl;
+        }
     }
 }
 void Automata::Check() {
@@ -96,8 +98,10 @@ void Automata::Check() {
         if (Cash < Prices[ChosenPosition]) {
             std::cout << "Недостаточно средств!";
             State = ACCEPT;
-        } else std::cout << "Подтвердите выбор " << Menu[ChosenPosition] <<
-            std::endl; 
+        } else {
+            std::cout << "Подтвердите выбор " << Menu[ChosenPosition] <<
+            std::endl;
+        }
     }
 }
 void Automata::Cancel() {
