@@ -1,5 +1,8 @@
 // Copyright 2020 GHA Test Team
 #include <gtest/gtest.h>
+#include <utility>
+#include <string>
+#include <vector>
 #include "Automata.h"
 
 TEST(Tests, TestMethod1) {
