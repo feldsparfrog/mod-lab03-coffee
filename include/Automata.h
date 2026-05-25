@@ -6,7 +6,8 @@
 #include <iostream>
 #include <locale>
 #include <fstream>
-std::pair<std::vector<std::string>, std::vector<int>> 
+#include <utility>
+std::pair<std::vector<std::string>, std::vector<int>>
 ReadFromFile(std::string filename);
 enum STATES { OFF, WAIT, ACCEPT, CHECK, COOK };
 class Automata {
@@ -15,7 +16,7 @@ class Automata {
     std::vector<int> Prices;
     STATES State;
     int ChosenPosition;
-public:
+ public:
     Automata(std::vector<std::string> menu, std::vector<int> prices);
     void On();
     void Off();
@@ -28,4 +29,4 @@ public:
     void Cook(bool printState);
     void Finish();
 };
-#endif
+#endif // INCLUDE_AUTOMATA_H_
