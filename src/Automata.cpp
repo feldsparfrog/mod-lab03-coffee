@@ -1,147 +1,127 @@
+// Copyright 2022 GHA Test Team
 #include "Automata.h"
-std::pair<std::vector<std::string>, std::vector<int>> ReadFromFile(std::string filename)
-{
-	setlocale(LC_ALL, "Russian");
-	std::string line;
-	std::vector<std::string> lines;
-	std::ifstream file(filename);
-	while (std::getline(file, line))
-	{
-		lines.push_back(line);
-	}
-	std::vector<std::string> menu;
-	std::vector<int> prices;
-	for (int i = 0; i < lines.size(); i++)
-	{
-		auto pos = lines[i].find(" ");
-		menu.push_back(lines[i].substr(0, pos));
-		prices.push_back(stoi(lines[i].substr(pos + 1)));
-	}
-	std::pair< std::vector<std::string>, std::vector<int>> data = std::make_pair(menu, prices);
-	return data;
+std::pair<std::vector<std::string>, std::vector<int>>
+ReadFromFile(std::string filename) {
+    setlocale(LC_ALL, "Russian");
+    std::string line;
+    std::vector<std::string> lines;
+    std::ifstream file(filename);
+    while (std::getline(file, line)) {
+         lines.push_back(line);
+    }
+    std::vector<std::string> menu;
+    std::vector<int> prices;
+    for (int i = 0; i < lines.size(); i++) {
+        auto pos = lines[i].find(" ");
+        menu.push_back(lines[i].substr(0, pos));
+        prices.push_back(stoi(lines[i].substr(pos + 1)));
+    }
+    std::pair< std::vector<std::string>, std::vector<int>> data =
+        std::make_pair(menu, prices);
+    return data;
 }
-Automata::Automata(std::vector<std::string> menu, std::vector<int> prices)
-{
-	Cash = 0;
-	Menu = menu;
-	Prices = prices;
-	State = OFF;
-	ChosenPosition = -1;
+Automata::Automata(std::vector<std::string> menu, std::vector<int> prices) {
+    Cash = 0;
+    Menu = menu;
+    Prices = prices;
+    State = OFF;
+    ChosenPosition = -1;
 }
-void Automata::On()
-{
-	if (State == OFF)
-	{
-		State = WAIT;
-		std::cout << "Àâòîìàò âêëþ÷¸í!" << std::endl;
-	}
+void Automata::On() {
+    if (State == OFF) {
+        State = WAIT;
+        std::cout << "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚ Ð²ÐºÐ»ÑŽÑ‡Ñ‘Ð½!" << std::endl;
+    }
 }
-void Automata::Off()
-{
-	if (State == WAIT)
-	{
-		State = OFF;
-		std::cout << "Àâòîìàò âûêëþ÷åí!" << std::endl;
-	}
+void Automata::Off() {
+    if (State == WAIT) {
+        State = OFF;
+        std::cout << "ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½!" << std::endl;
+    }
 }
-void Automata::Coin(unsigned int value)
-{
-	if (State == WAIT || State == ACCEPT)
-	{
-		State = ACCEPT;
-		Cash += value;
-		std::cout << "Âíåñåíî: " << value << std::endl << "Áàëàíñ: " << Cash << std::endl;
+void Automata::Coin(unsigned int value) {
+    if (State == WAIT || State == ACCEPT) {
+        State = ACCEPT;
+        Cash += value;
+        std::cout << "Ð’Ð½ÐµÑÐµÐ½Ð¾: " << value << std::endl <<
+            "Ð‘Ð°Ð»Ð°Ð½Ñ: " << Cash << std::endl;
 	}
 }
-void Automata::GetMenu()
-{
-	for (int i = 0; i < Menu.size(); i++)
-	{
-		std::cout << i + 1 << ". " << Menu[i] << " " << Prices[i] << std::endl;
-	}
+void Automata::GetMenu() {
+    for (int i = 0; i < Menu.size(); i++) {
+        std::cout << i + 1 << ". " << Menu[i] << " " << Prices[i] << std::endl;
+    }
 }
-STATES Automata::GetState()const
-{
-	std::string stateToText;
-	switch (State)
-	{
-	case 0:
-		stateToText = "Off";
-		break;
-	case 1:
-		stateToText = "Wait";
-		break;
-	case 2:
-		stateToText = "Accept";
-		break;
-	case 3:
-		stateToText = "Check";
-		break;
-	case 4:
-		stateToText = "Cook";
-		break;
-	default:
-		stateToText = "";
-		break;
-	}
-	std::cout << "Òåêóùåå ñîñòîÿíèå: " << stateToText << std::endl;
-	return State;
+STATES Automata::GetState()const {
+    std::string stateToText;
+    switch (State) {
+    case 0:
+        stateToText = "Off";
+        break;
+    case 1:
+        stateToText = "Wait";
+        break;
+    case 2:
+        stateToText = "Accept";
+        break;
+    case 3:
+        stateToText = "Check";
+        break;
+    case 4:
+        stateToText = "Cook";
+        break;
+    default:
+        stateToText = "";
+        break;
+    }
+    std::cout << "Ð¢ÐµÐºÑƒÑ‰ÐµÐµ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ðµ: " << stateToText << std::endl;
+    return State;
 }
-void Automata::Choice(int index)
-{
-	if (State == ACCEPT)
-	{
-		if (index < Menu.size() && index >= 0)
-		{
-			State = CHECK;
-			std::cout << "Âû âûáðàëè: " << Menu[index] << std::endl;
-			ChosenPosition = index;
-			Check();
-		}
-		else std::cout << "Òîâàð íå íàéäåí!" << std::endl;
-	}
+void Automata::Choice(int index) {
+    if (State == ACCEPT) {
+        if (index < Menu.size() && index >= 0) {
+            State = CHECK;
+            std::cout << "Ð’Ñ‹ Ð²Ñ‹Ð±Ñ€Ð°Ð»Ð¸: " << Menu[index] << std::endl;
+            ChosenPosition = index;
+            Check();
+        } else std::cout << "Ð¢Ð¾Ð²Ð°Ñ€ Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½!" << std::endl;
+    }
 }
-void Automata::Check()
-{
-	if (State == CHECK)
-	{
-		if (Cash < Prices[ChosenPosition])
-		{
-			std::cout << "Íåäîñòàòî÷íî ñðåäñòâ!";
-			State = ACCEPT;
-		}
-		else std::cout << "Ïîäòâåðäèòå âûáîð " << Menu[ChosenPosition] << std::endl;
-	}
+void Automata::Check() {
+    if (State == CHECK) {
+        if (Cash < Prices[ChosenPosition]) {
+            std::cout << "ÐÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾ ÑÑ€ÐµÐ´ÑÑ‚Ð²!";
+            State = ACCEPT;
+        } else std::cout << "ÐŸÐ¾Ð´Ñ‚Ð²ÐµÑ€Ð´Ð¸Ñ‚Ðµ Ð²Ñ‹Ð±Ð¾Ñ€ " << Menu[ChosenPosition] <<
+            std::endl;
+    }
 }
-void Automata::Cancel()
-{
-	if (State == ACCEPT || State == CHECK)
-	{
-		State = WAIT;
-		std::cout << "Çàêàç îòìåí¸í, äåíüãè âîçâðàùåíû." << std::endl;
-		Cash = 0;
-		ChosenPosition = -1;
-	}
+void Automata::Cancel() {
+    if (State == ACCEPT || State == CHECK) {
+        State = WAIT;
+        std::cout << "Ð—Ð°ÐºÐ°Ð· Ð¾Ñ‚Ð¼ÐµÐ½Ñ‘Ð½, Ð´ÐµÐ½ÑŒÐ³Ð¸ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰ÐµÐ½Ñ‹." << std::endl;
+        Cash = 0;
+        ChosenPosition = -1;
+    }
 }
-void Automata::Cook(bool printState)
-{
-	if (State == CHECK)
-	{
-		State = COOK;
-		std::cout << "Âàø " << Menu[ChosenPosition] << " ãîòîâèòñÿ..." << std::endl;
-		if (printState) GetState();
-		Cash -= Prices[ChosenPosition];
-		std::cout << "..." << std::endl << "Âàø " << Menu[ChosenPosition] << " ãîòîâ!" << std::endl;
-		Finish();
-	}
+void Automata::Cook(bool printState) {
+    if (State == CHECK) {
+        State = COOK;
+        std::cout << "Ð’Ð°Ñˆ " << Menu[ChosenPosition] << " Ð³Ð¾Ñ‚Ð¾Ð²Ð¸Ñ‚ÑÑ..." <<
+            std::endl;
+        if (printState) GetState();
+        Cash -= Prices[ChosenPosition];
+        std::cout << "..." << std::endl << "Ð’Ð°Ñˆ " << Menu[ChosenPosition] <<
+            " Ð³Ð¾Ñ‚Ð¾Ð²!" << std::endl;
+        Finish();
+    }
 }
-void Automata::Finish()
-{
-	if (State == COOK)
-	{
-		State = WAIT;
-		std::cout << "Ñäà÷à: " << Cash << std::endl << "Õîðîøåãî äíÿ!" << std::endl;
-		Cash = 0;
-		ChosenPosition = -1;
-	}
+void Automata::Finish() {
+    if (State == COOK) {
+        State = WAIT;
+        std::cout << "Ð¡Ð´Ð°Ñ‡Ð°: " << Cash << std::endl << "Ð¥Ð¾Ñ€Ð¾ÑˆÐµÐ³Ð¾ Ð´Ð½Ñ!" <<
+            std::endl;
+        Cash = 0;
+        ChosenPosition = -1;
+    }
 }
