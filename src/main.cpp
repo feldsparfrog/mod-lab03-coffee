@@ -1,4 +1,7 @@
 // Copyright 2022 GHA Test Team
+#include <utility>
+#include <string>
+#include <vector>
 #include "Automata.h"
 int main() {
     std::pair< std::vector<std::string>, std::vector<int>> data =
