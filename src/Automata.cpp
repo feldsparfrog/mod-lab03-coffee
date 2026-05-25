@@ -1,4 +1,8 @@
 // Copyright 2022 GHA Test Team
+#include <utility>
+#include <vector>
+#include <string>
+#include <iostream>
 #include "Automata.h"
 std::pair<std::vector<std::string>, std::vector<int>>
 ReadFromFile(std::string filename) {
@@ -45,7 +49,7 @@ void Automata::Coin(unsigned int value) {
         Cash += value;
         std::cout << "Внесено: " << value << std::endl <<
             "Баланс: " << Cash << std::endl;
-	}
+    }
 }
 void Automata::GetMenu() {
     for (int i = 0; i < Menu.size(); i++) {
@@ -84,8 +88,7 @@ void Automata::Choice(int index) {
             std::cout << "Вы выбрали: " << Menu[index] << std::endl;
             ChosenPosition = index;
             Check();
-        } else std::cout << "Товар не найден!" << std::endl;
-    }
+        } else std::cout << "Товар не найден!" << std::endl; }
 }
 void Automata::Check() {
     if (State == CHECK) {
@@ -93,8 +96,7 @@ void Automata::Check() {
             std::cout << "Недостаточно средств!";
             State = ACCEPT;
         } else std::cout << "Подтвердите выбор " << Menu[ChosenPosition] <<
-            std::endl;
-    }
+            std::endl; }
 }
 void Automata::Cancel() {
     if (State == ACCEPT || State == CHECK) {
